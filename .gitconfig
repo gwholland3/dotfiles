@@ -1,13 +1,19 @@
 [user]
+   # These values determine what ends up in the <author> and <committer> fields of commit objects
 	name = Grant Holland
 	email = gwholland3@gmail.com
 [core]
+   # Do not automatically convert line endings in the working directory to CRLF
 	autocrlf = input
 [color]
+   # Use color when outputting to the terminal
 	ui = auto
 [alias]
+   # Very pretty logging output
 	lg = log --graph --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --author-date-order
 [pull]
+   # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
 [init]
+   # Override the default branch name when initializing a new Git repository
 	defaultBranch = main
