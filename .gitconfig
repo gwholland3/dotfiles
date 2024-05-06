@@ -11,9 +11,15 @@
 [alias]
    # Very pretty logging output
 	lg = log --graph --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --author-date-order
+
+   # Show the last commit that touched a file, even if that file has been deleted
+	delCommit = log --all -1 --
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
 [init]
    # Override the default branch name when initializing a new Git repository
 	defaultBranch = main
+[grep]
+   # Always show line numbers in output of git grep
+	lineNumber = true
