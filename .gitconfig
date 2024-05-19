@@ -14,6 +14,9 @@
 
    # Show the last commit that touched a file, even if that file has been deleted
 	delCommit = log --all -1 --
+
+   # Fetch from origin AND update the default branch locally, but remain on the original branch from which you ran the command
+	sync = !git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@') && git pull -p && git checkout -
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
