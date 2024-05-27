@@ -17,6 +17,9 @@
 
    # Fetch from origin AND update the default branch locally, but remain on the original branch from which you ran the command
 	sync = !git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@') && git pull -p && git checkout -
+
+   # Force push, but only if the remote branch hasn't been updated since the last fetch and its tip is still contained in the overriding branch
+	pushfl = push --force-with-lease --force-if-includes
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
