@@ -32,3 +32,6 @@
 [grep]
    # Always show line numbers in output of git grep
 	lineNumber = true
+[push]
+   # Automatically set up an upstream tracking branch when running `git push` on a local-only branch
+	autoSetupRemote = true
