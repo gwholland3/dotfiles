@@ -15,8 +15,18 @@
    # Show the last commit that touched a file, even if that file has been deleted (relative to HEAD)
 	delCommit = log -1 --
 
+   # Alias for checking if the current working directory is in a git repo. This command should output
+   # the typical git error message if not in a repo. Otherwise, it outputs nothing.
+   in-repo = rev-parse
+
+   # Output the name of the repo's default branch
+   mainb = !git in-repo && basename $(git symbolic-ref --short refs/remotes/origin/HEAD)
+
    # Fetch from origin AND update the default branch locally, but remain on the original branch from which you ran the command
-	sync = !git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@') && git pull -p && git checkout -
+	sync = !git in-repo && git checkout $(git mainb) && git pull -p && git checkout -
+
+   # Squash all the commits on the current feature branch into one, keeping the commit message of the first
+   squash = !git in-repo && git reset --soft $(git merge-base HEAD $(git mainb)) && git commit -m \"$(git log --reverse --format=%B HEAD..HEAD@{1} | head -n 1)\"
 
    # Force push, but only if the remote branch hasn't been updated since the last fetch and its tip is still contained in the overriding branch
 	pushfl = push --force-with-lease --force-if-includes
