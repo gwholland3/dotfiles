@@ -17,5 +17,8 @@ alias notify='printf "\a"'
 alias brew_cask_up='brew upgrade --cask $(brew outdated --cask --greedy | cut -d " " -f 1 | grep -v brave-browser | tr "\n" " ")'
 
 # cd into my dotfiles repo
-alias dots='cd ~/Grant/Github\ Repos/dotfiles/'
+alias dots='cd ~/Grant/GitHub\ Repos/dotfiles/'
+
+# Shorthand git commands
+alias gs='git status'
 
