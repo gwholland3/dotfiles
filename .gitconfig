@@ -22,8 +22,8 @@
    # Output the name of the repo's default branch
    mainb = !git in-repo && basename $(git symbolic-ref --short refs/remotes/origin/HEAD)
 
-   # Fetch from origin AND update the default branch locally, but remain on the original branch from which you ran the command
-	sync = !git in-repo && git checkout $(git mainb) && git pull -p && git checkout -
+   # Fetch from origin AND update the default branch locally, but remain on the original branch from which you ran the command, with all uncommitted changes preserved
+	sync = !git in-repo && git stash push -u && git checkout $(git mainb) && git pull -p && git checkout - && git stash pop
 
    # Squash all the commits on the current feature branch into one, keeping the commit message of the first
    squash = !git in-repo && git reset --soft $(git merge-base HEAD $(git mainb)) && git commit -m \"$(git log --reverse --format=%B HEAD..HEAD@{1} | head -n 1)\"
@@ -36,6 +36,9 @@
 
    # Checks whether one commit "contains" another
    contains = "!git in-repo && f() { git merge-base --is-ancestor \"$2\" \"$1\" && echo yes || echo no; }; f"
+
+   # Fetch from origin, then checkout a tracking branch for the specified remote branch locally
+   get-branch = !git in-repo && git sync && git checkout
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
