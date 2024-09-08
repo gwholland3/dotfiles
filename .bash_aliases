@@ -21,4 +21,8 @@ alias dots='cd ~/Grant/GitHub\ Repos/dotfiles/'
 
 # Shorthand git commands
 alias gs='git status'
+alias gd='git diff'
+
+# For use in git-related shell functions: return from the function if not in a git repo
+alias git_repo_check='git in-repo || return 1'
 

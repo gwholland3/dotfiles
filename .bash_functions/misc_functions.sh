@@ -8,11 +8,6 @@ function getalias() {
    alias | grep "^alias ${alias_name}=" | sed -E "s/^alias ${alias_name}='(.*)'/\1/"
 }
 
-# Alias for checking if the current working directory is in a git repo
-function in_git_repo() {
-   git in-repo
-}
-
 # simple helper function to activate a relevant Python venv
 function venv() {
    # Search for the venv from the current directoy by default
