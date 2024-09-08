@@ -13,5 +13,5 @@ if [ -f ~/.bash_functions/bash_functions.sh ]; then
 fi
 
 # Make my custom binaries available
-export PATH=~/bin:$PATH
+export PATH=${PATH}:$HOME/bin
 
