@@ -10,6 +10,18 @@ function git_wt_clean() {
    # The "short" output of `git status` should contain nothing if the worktree is clean
    [ -z "$(git status -s)" ]
 }
+#
+# Checkout the main branch and updated it from remote
+function git_now() {
+   # Return if not in a git repo
+   git_repo_check
+
+   # Return if there are local changes
+   git_wt_clean_check
+
+   git checkout $(git mainb)
+   git pull -p
+}
 
 # Fetch from origin AND update the default branch locally, but remain on the original branch
 # from which you ran the command, with all uncommitted changes preserved

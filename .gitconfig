@@ -51,6 +51,7 @@
 
    wt-clean = !bash -l -c "git_wt_clean"
    sync =     !bash -l -c "git_sync"
+   now =      !bash -l -c "git_now"
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false

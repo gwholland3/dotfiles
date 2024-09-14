@@ -23,6 +23,9 @@ alias gd='git diff'
 # For use in git-related shell functions: return from the function if not in a git repo
 alias git_repo_check='git in-repo || return 1'
 
+# For use in git-related shell functions: return from the function if there are local changes, with error message
+alias git_wt_clean_check='git wt-clean || (echo "You have local changes. Please commit or stash them."; return 1) || return 1'
+
 # Upgrades all outdated homebrew casks, except for brave-browser (because I don't like to restart my browser frequently)
 alias brew_cask_up='brew upgrade --cask $(brew outdated --cask --greedy | cut -d " " -f 1 | grep -v brave-browser | tr "\n" " ")'
 
