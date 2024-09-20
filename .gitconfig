@@ -36,7 +36,7 @@
    contains = "!git in-repo && f() { git merge-base --is-ancestor \"$2\" \"$1\" && echo yes || echo no; }; f"
 
    # Fetch from origin, then checkout a tracking branch for the specified remote branch locally
-   get-branch = !git in-repo && git sync && git checkout
+   get-branch = !git in-repo && git wt-clean && git sync && git checkout
 
    ###############################################################
    # BASH FUNCTIONS 
