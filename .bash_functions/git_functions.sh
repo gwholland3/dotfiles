@@ -10,7 +10,7 @@ function git_wt_clean() {
    # The "short" output of `git status` should contain nothing if the worktree is clean
    [ -z "$(git status -s)" ]
 }
-#
+
 # Checkout the main branch and updated it from remote
 function git_now() {
    # Return if not in a git repo
@@ -51,5 +51,25 @@ function git_sync() {
       # Restore any uncommitted changes on the original branch
       git stash pop
    fi
+}
+
+# Checks out a tracking branch for the specified remote branch locally. Automatically syncs
+# with the remote first in case the branch was created after your most recent fetch, and
+# resets the local tracking branch to its remote upstream if said local branch already exists.
+function git_get_branch() {
+   # Return if not in a git repo
+   git_repo_check
+
+   # Return if there are local changes
+   git_wt_clean_check
+
+   local branch_name="$1"
+
+   # Pull latest state from remote
+   git sync
+
+   # Check out requested branch locally, and align it with remote if necessary
+   git checkout "$branch_name"
+   git reset --hard origin/"$branch_name"
 }
 

@@ -35,9 +35,6 @@
    # Checks whether one commit "contains" another
    contains = "!git in-repo && f() { git merge-base --is-ancestor \"$2\" \"$1\" && echo yes || echo no; }; f"
 
-   # Fetch from origin, then checkout a tracking branch for the specified remote branch locally
-   get-branch = !git in-repo && git wt-clean && git sync && git checkout
-
    ###############################################################
    # BASH FUNCTIONS 
    #
@@ -49,9 +46,10 @@
    # definitions for more about what these do.
    ###############################################################
 
-   wt-clean = !bash -l -c "git_wt_clean"
-   sync =     !bash -l -c "git_sync"
-   now =      !bash -l -c "git_now"
+   wt-clean =   !bash -l -c "git_wt_clean"
+   sync =       !bash -l -c "git_sync"
+   now =        !bash -l -c "git_now"
+   get-branch = !bash -l -c "git_get_branch"
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
