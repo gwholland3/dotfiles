@@ -35,6 +35,10 @@
    # Checks whether one commit "contains" another
    contains = "!git in-repo && f() { git merge-base --is-ancestor \"$2\" \"$1\" && echo yes || echo no; }; f"
 
+   #exec =  "!$@ #"  ; Lol. See additional options below:
+   #exec2 = "!$@;:"
+   #exec3 = "!:;"
+
    ###############################################################
    # BASH FUNCTIONS 
    #
@@ -49,7 +53,7 @@
    wt-clean =   !bash -l -c "git_wt_clean"
    sync =       !bash -l -c "git_sync"
    now =        !bash -l -c "git_now"
-   get-branch = !bash -l -c "git_get_branch"
+   get-branch = "!bash -l -c \"git_get_branch $@\" #"
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
