@@ -2,6 +2,31 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Attempt to force delete the specified branch name from both remote and local.
+function git_delete_b() {
+   # Return if not in a git repo
+   git_repo_check
+
+   # Return if there are local changes
+   git_wt_clean_check
+
+   local branch_to_delete="$1"
+
+   # If we currently have to to-be-deleted branch checked out,
+   # first check out the main branch instead
+   local current_branch="$(git rev-parse --abbrev-ref HEAD)"
+   if [ "$current_branch" == "$branch_to_delete" ]; then
+      echo "yes"
+      git checkout "$(git mainb)"
+   fi
+
+   # First attempt to delete the branch on the remote, then
+   # try to delete it locally. If either branch doesn't exist,
+   # git already has its own helpful error messages.
+   git push -d origin "$branch_to_delete"
+   git branch -D "$branch_to_delete"
+}
+
 # Check if the worktree is clean. Exit code 0 if there are no local changes, 1 otherwise.
 function git_wt_clean() {
    # Return if not in a git repo

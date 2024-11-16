@@ -54,6 +54,7 @@
    sync =       !bash -l -c "git_sync"
    now =        !bash -l -c "git_now"
    get-branch = "!bash -l -c \"git_get_branch $@\" #"
+   delete-b   = "!bash -l -c \"git_delete_b $@\" #"
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
