@@ -35,6 +35,9 @@
    # Checks whether one commit "contains" another
    contains = "!git in-repo && f() { git merge-base --is-ancestor \"$2\" \"$1\" && echo yes || echo no; }; f"
 
+   # Runs `git prune` and also deletes the associated log file
+   auto-prune = "!git in-repo && git prune && rm \"$(git rev-parse --show-toplevel)/.git/gc.log\""
+
    #exec =  "!$@ #"  ; Lol. See additional options below:
    #exec2 = "!$@;:"
    #exec3 = "!:;"
