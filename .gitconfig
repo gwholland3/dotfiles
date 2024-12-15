@@ -23,9 +23,6 @@
    # Output the name of the repo's default branch
    mainb = !git in-repo && basename $(git symbolic-ref --short refs/remotes/origin/HEAD)
 
-   # Squash all the commits on the current feature branch into one, keeping the commit message of the first
-   squash = !git in-repo && git reset --soft $(git merge-base HEAD $(git mainb)) && git commit -m \"$(git log --reverse --format=%B HEAD..HEAD@{1} | head -n 1)\"
-
    # Force push, but only if the remote branch hasn't been updated since the last fetch and its tip is still contained in the overriding branch
 	pushfl = push --force-with-lease --force-if-includes
 
@@ -53,11 +50,13 @@
    # definitions for more about what these do.
    ###############################################################
 
-   wt-clean =   !bash -l -c "git_wt_clean"
-   sync =       !bash -l -c "git_sync"
-   now =        !bash -l -c "git_now"
-   get-branch = "!bash -l -c \"git_get_branch $@\" #"
-   delete-b   = "!bash -l -c \"git_delete_b $@\" #"
+   # This strange way of invoking these Bash functions allows them to receive arguments
+   wt-clean   = "!bash -l -c '\"$0\" \"$@\"' git_wt_clean"
+   sync       = "!bash -l -c '\"$0\" \"$@\"' git_sync"
+   now        = "!bash -l -c '\"$0\" \"$@\"' git_now"
+   get-branch = "!bash -l -c '\"$0\" \"$@\"' git_get_branch"
+   delete-b   = "!bash -l -c '\"$0\" \"$@\"' git_delete_b"
+   squash     = "!bash -l -c '\"$0\" \"$@\"' git_squash"
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false

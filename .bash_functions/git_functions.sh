@@ -2,6 +2,56 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Squash all the commits on the current feature branch into one, keeping the commit message
+# of the first.
+#
+# Note that you can provide an argument to indicate that you are merging to
+# a destination branch other than the default repo branch, and a subsequent `-l` flag to
+# indicate that merge-base should look at the local version of the destination branch,
+# rather than the remote one.
+function git_squash() {
+   # Return if not in a git repo
+   git_repo_check
+
+   # Return if there are local changes
+   git_wt_clean_check
+
+   echo $#
+   echo "$1"
+
+   # Determine the name of the destination branch that the current feature branch is
+   # being merged into. This allows us to deduce the first commit on the feature branch.
+   local destination_branch="origin/$(git mainb)"
+   if [ $# -gt 0 ]; then
+      destination_branch="origin/$1"
+      if [ $# -gt 1 ] && [ "$2" == "-l" ]; then
+         destination_branch="$1"
+      fi
+   fi
+
+   # Find the merge-base commit between the feature and destination branches.
+   local merge_base_commit
+   merge_base_commit="$(git merge-base HEAD "$destination_branch")"
+
+   # If the previous command failed, assume the provided destination branch name was bad
+   # and bail out.
+   if [ $? -ne 0 ]; then
+      echo "Invalid destination branch name: $destination_branch"
+      return 1
+   fi
+
+   # Reset us back to the merge-base commit, but retain all the changes made on the
+   # feature branch so far.
+   git reset --soft "$merge_base_commit"
+   
+   # Grab the commit message from the first commit on the feature branch. This is the message
+   # we'll use for our final squashed commit.
+   local first_commit_msg="$(git log --reverse --format=%B HEAD..HEAD@{1} | head -n 1)"
+
+   # Create a new, squashed commit with all the changes on the feature branch.
+   git commit -m "$first_commit_msg"
+}
+
 # Attempt to force delete the specified branch name from both remote and local.
 function git_delete_b() {
    # Return if not in a git repo

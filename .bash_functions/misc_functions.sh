@@ -2,6 +2,18 @@
 # Miscellaneous Bash Functions #
 #------------------------------#
 
+# A function for testing/debugging
+function my_test_function() {
+   echo "$0"
+
+   for arg in "$@"
+   do
+      echo "$arg"
+   done
+
+   echo "EXP_VAR: $EXP_VAR"
+}
+
 # Resolve an alias name to the command it's mapped to
 function getalias() {
    local alias_name="$1"
