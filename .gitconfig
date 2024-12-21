@@ -57,6 +57,7 @@
    get-branch = "!bash -l -c '\"$0\" \"$@\"' git_get_branch"
    delete-b   = "!bash -l -c '\"$0\" \"$@\"' git_delete_b"
    squash     = "!bash -l -c '\"$0\" \"$@\"' git_squash"
+   pr-diff    = "!bash -l -c '\"$0\" \"$@\"' git_pr_diff"
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false

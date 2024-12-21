@@ -2,6 +2,25 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Takes two Git revisions as arguments, which are assumed to be an old head commit
+# on a PR and a new head commit. Performs a diff of the two revisions, given the
+# context that both are being proposed to merge to the main branch.
+function git_pr_diff() {
+   # Return if not in a git repo
+   git_repo_check
+
+   # Output an error message an exit if there aren't two arguments
+   if [ $# -ne 2 ]; then
+      echo "Error: this function requires two arguments"
+      return 1
+   fi
+
+   local old_ref="$1"
+   local new_ref="$2"
+
+   git range-diff $(git mainb)@{upstream} "${old_ref}" "${new_ref}"
+}
+
 # Squash all the commits on the current feature branch into one, keeping the commit message
 # of the first.
 #
@@ -15,9 +34,6 @@ function git_squash() {
 
    # Return if there are local changes
    git_wt_clean_check
-
-   echo $#
-   echo "$1"
 
    # Determine the name of the destination branch that the current feature branch is
    # being merged into. This allows us to deduce the first commit on the feature branch.
