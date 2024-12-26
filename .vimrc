@@ -44,3 +44,7 @@ autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4
 autocmd FileType conf setlocal nosmartindent
 autocmd BufNewFile,BufRead * if &ft == '' | setlocal nosmartindent | endif
 
+" Associate `.inc` files (my gitconfig include files) with the `gitconfig`
+" filetype for proper syntax highlighting
+autocmd BufNewFile,BufRead *.inc set filetype=gitconfig
+
