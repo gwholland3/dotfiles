@@ -27,6 +27,9 @@
    # Amend most recent commit with current changes and keep the same commit message
    fixup = commit --amend --no-edit
 
+   # Outputs the name of the branch that is currently checked out, or nothing if HEAD is not pointing to a branch
+   thisb = branch --show-current
+
    # Checks whether one commit "contains" another
    contains = "!git in-repo && f() { git merge-base --is-ancestor \"$2\" \"$1\" && echo yes || echo no; }; f"
 
