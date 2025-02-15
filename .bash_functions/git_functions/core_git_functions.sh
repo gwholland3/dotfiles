@@ -154,6 +154,9 @@ function git_get_branch() {
    # Return if there are local changes
    git_wt_clean_check
 
+   # TODO: consider adding a flag that allows the user to specify a portion of the branch name (such as a ticket slug),
+   # in which case we should search for the branch to check out.
+
    local branch_name="$1"
 
    # Pull latest state from remote
