@@ -1,8 +1,10 @@
 # This file is only partially representative of my actual .bash_profile file.
 # It contains the common commands that I would want to run on nearly any system.
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+# My .bash_profile file - the starting point for most of my Bash customization.
+
+if [ -f ~/.bash_aliases/bash_aliases.sh ]; then
+    . ~/.bash_aliases/bash_aliases.sh
 fi
 
 # Always expand aliases (normally, this is only true by default for interactive shells)
