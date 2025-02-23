@@ -11,7 +11,7 @@
 	lg = log --graph --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --author-date-order
 
    # Show the last commit that touched a file, even if that file has been deleted (relative to HEAD)
-	del-commit = log -1 --
+	fdel-commit = log -1 --
 
    # Alias for checking if the current working directory is in a git repo. This command should output
    # the typical git error message if not in a repo. Otherwise, it outputs nothing. Its exit code also
@@ -52,13 +52,14 @@
    ###############################################################
 
    # This strange way of invoking these Bash functions allows them to receive arguments
-   wt-clean   = "!bash -l -c '\"$0\" \"$@\"' git_wt_clean"
-   sync       = "!bash -l -c '\"$0\" \"$@\"' git_sync"
-   now        = "!bash -l -c '\"$0\" \"$@\"' git_now"
-   get-branch = "!bash -l -c '\"$0\" \"$@\"' git_get_branch"
-   delete-b   = "!bash -l -c '\"$0\" \"$@\"' git_delete_b"
-   squash     = "!bash -l -c '\"$0\" \"$@\"' git_squash"
-   pr-diff    = "!bash -l -c '\"$0\" \"$@\"' git_pr_diff"
+   wt-clean          = "!bash -l -c '\"$0\" \"$@\"' git_wt_clean"
+   sync              = "!bash -l -c '\"$0\" \"$@\"' git_sync"
+   now               = "!bash -l -c '\"$0\" \"$@\"' git_now"
+   get-branch        = "!bash -l -c '\"$0\" \"$@\"' git_get_branch"
+   delete-b          = "!bash -l -c '\"$0\" \"$@\"' git_delete_b"
+   squash            = "!bash -l -c '\"$0\" \"$@\"' git_squash"
+   pr-diff           = "!bash -l -c '\"$0\" \"$@\"' git_pr_diff"
+   ldel-commit       = "!bash -l -c '\"$0\" \"$@\"' git_ldel_commit"
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false

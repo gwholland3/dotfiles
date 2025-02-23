@@ -2,6 +2,46 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Finds which commits have deleted a line based on user-provided line regex. By default,
+# only searches three months back to reduce runtime, but this (and other `git log` params)
+# can be overridden via additional arguments to this function that are passed to `git log`.
+function git_ldel_commit() {
+   # Output an error message and exit if there isn't at least one argument
+   if [ $# -lt 1 ]; then
+      echo "Error: this function requires at least one argument"
+      return 1
+   fi
+
+   # User-provided regex for the deleted line to search for
+   local line_regex="$1"
+
+   # Any additional params to pass to the `git log` command, such as specifying filepaths
+   # or requesting a longer search period.
+   #
+   # Store these as a Bash array so we can expand them into separate words later.
+   local git_log_params=("${@:2}")
+
+   # This is how Git represents line deletions in its patch output. We'll use this to
+   # filter down to just commits that actually delete the line, not just contain it in
+   # the patch output.
+   local deletion_regex="^- "
+
+   # Use `git log` to search for all commits that contain the line regex in their patch diff.
+   # This will also return commits that only _add_ the line regex, rather than delete it, so
+   # we evaluate every returned candidate commit to see if its patch diff demonstrates deletion.
+   #
+   # Commits that pass this filter are displayed via `git show`, which emulates `git log` output.
+   #
+   # By default, we only look for commits up to three months back, because otherwise this search
+   # gets expensive. This can be overridden by the user if necessary.
+   git log -G"${line_regex}" --since='three months ago' --pretty='tformat:%H' "${git_log_params[@]}" |
+      # Check if the read-in line has non-zero length as a secondary condition for entering the while
+      # loop, to protect against outputs without a trailing newline.
+      while IFS= read -r candidate_commit || [ -n "${candidate_commit}" ]; do
+         git show "${candidate_commit}" | rg --quiet "${deletion_regex}.*${line_regex}" && git show "${candidate_commit}" --no-patch
+      done
+}
+
 # Takes two Git revisions as arguments, which are assumed to be an old head commit
 # on a PR and a new head commit. Performs a diff of the two revisions, given the
 # context that both are being proposed to merge to the main branch.
