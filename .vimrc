@@ -2,6 +2,13 @@
 " Global settings
 """"""""""""""""""""""""
 
+" Load optional plugins
+" We prefix these commands with `silent!` so that they don't output an error
+" message if a plugin happens to not exist on particular system.
+"
+" The `comment` plugin enables commenting and uncommenting lines quickly.
+silent! packadd comment
+
 " Set the default width of a tab to N spaces
 set tabstop=3
 set softtabstop=3
