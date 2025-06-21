@@ -30,6 +30,9 @@
    # Outputs the name of the branch that is currently checked out, or nothing if HEAD is not pointing to a branch
    thisb = branch --show-current
 
+   # Simple shorthand alias
+   rl = reflog
+
    # Checks whether one commit "contains" another
    contains = "!git in-repo && f() { git merge-base --is-ancestor \"$2\" \"$1\" && echo yes || echo no; }; f"
 
