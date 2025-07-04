@@ -21,6 +21,9 @@
    # Output the name of the repo's default branch
    mainb = !git in-repo && basename $(git symbolic-ref --short refs/remotes/origin/HEAD)
 
+   # Checkout your local version of the repo's default branch
+   go-main = !git checkout $(git mainb)
+
    # Force push, but only if the remote branch hasn't been updated since the last fetch and its tip is still contained in the overriding branch
 	pushfl = push --force-with-lease --force-if-includes
 
