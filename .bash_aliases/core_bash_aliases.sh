@@ -30,6 +30,11 @@ alias git_wt_clean_check='git wt-clean || (echo "You have local changes. Please 
 # Produces a nicely-colored diff
 alias pretty_diff='git diff --no-index --'
 
+# Shorthand Bazel commands
+alias bb='bazel build'
+alias br='bazel run'
+alias bt='bazel test'
+
 # Upgrades all outdated homebrew casks, except for brave-browser (because I don't like to restart my browser frequently)
 alias brew_cask_up='brew upgrade --cask $(brew outdated --cask --greedy | cut -d " " -f 1 | grep -v brave-browser | tr "\n" " ")'
 
