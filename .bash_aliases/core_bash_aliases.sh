@@ -34,6 +34,7 @@ alias pretty_diff='git diff --no-index --'
 alias bb='bazel build'
 alias br='bazel run'
 alias bt='bazel test'
+alias bq='bazel query'
 
 # Upgrades all outdated homebrew casks, except for brave-browser (because I don't like to restart my browser frequently)
 alias brew_cask_up='brew upgrade --cask $(brew outdated --cask --greedy | cut -d " " -f 1 | grep -v brave-browser | tr "\n" " ")'
