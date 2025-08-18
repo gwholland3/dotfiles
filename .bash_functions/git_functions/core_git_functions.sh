@@ -122,7 +122,7 @@ function git_delete_b() {
    # first check out the main branch instead
    local current_branch="$(git rev-parse --abbrev-ref HEAD)"
    if [ "$current_branch" == "$branch_to_delete" ]; then
-      echo "yes"
+      echo "Branch to be deleted is currently checked out, switching to repository main branch"
       git checkout "$(git mainb)"
    fi
 
