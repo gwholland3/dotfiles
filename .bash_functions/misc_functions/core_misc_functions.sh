@@ -14,6 +14,21 @@ function my_test_function() {
    echo "EXP_VAR: $EXP_VAR"
 }
 
+# Invoke `cd` as normal, then run `ll` in the resulting directory
+function cdl() {
+   # The `cd` Bash builtin treats a null argument (e.g. `cd ""`) as equivalent to
+   # `.`, i.e. the current directory. So, if the user invoked `cdl` with no argument,
+   # we invoke `cd` with no argument.
+   if [ -z "$1" ]
+   then
+      cd
+   else
+      cd "$1"
+   fi
+
+   ll
+}
+
 # Resolve an alias name to the command it's mapped to
 function getalias() {
    local alias_name="$1"
