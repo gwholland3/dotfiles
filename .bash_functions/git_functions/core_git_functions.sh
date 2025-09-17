@@ -2,6 +2,32 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Outputs a diff of two files, but only comparing the specified chunk of each file, and at arbitrary git revisions.
+function git_diff_chunks() {
+   # Return if not in a git repo
+   git_repo_check
+
+   # Output an error message and exit if there aren't eight arguments
+   if [ $# -ne 8 ]; then
+      echo "Error: this function requires eight arguments"
+      return 1
+   fi
+
+   local first_file_path="$1"
+   local first_file_commit="$2"
+   local first_file_start_line="$3"
+   local first_file_end_line="$4"
+
+   local second_file_path="$5"
+   local second_file_commit="$6"
+   local second_file_start_line="$7"
+   local second_file_end_line="$8"
+
+   diff -u \
+      <(git show "${first_file_commit}":"${first_file_path}" | sed -n "${first_file_start_line},${first_file_end_line}p") \
+      <(git show "${second_file_commit}":"${second_file_path}" | sed -n "${second_file_start_line},${second_file_end_line}p")
+}
+
 # Finds which commits have deleted a line based on user-provided line regex. By default,
 # only searches three months back to reduce runtime, but this (and other `git log` params)
 # can be overridden via additional arguments to this function that are passed to `git log`.
@@ -49,7 +75,7 @@ function git_pr_diff() {
    # Return if not in a git repo
    git_repo_check
 
-   # Output an error message an exit if there aren't two arguments
+   # Output an error message and exit if there aren't two arguments
    if [ $# -ne 2 ]; then
       echo "Error: this function requires two arguments"
       return 1

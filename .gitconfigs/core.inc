@@ -66,6 +66,7 @@
    squash            = "!bash -l -c '\"$0\" \"$@\"' git_squash"
    pr-diff           = "!bash -l -c '\"$0\" \"$@\"' git_pr_diff"
    ldel-commit       = "!bash -l -c '\"$0\" \"$@\"' git_ldel_commit"
+   diff-chunks       = "!bash -l -c '\"$0\" \"$@\"' git_diff_chunks"
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
