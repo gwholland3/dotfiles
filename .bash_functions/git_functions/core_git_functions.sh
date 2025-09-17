@@ -2,6 +2,20 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Compares the diff of two commits using git range-diff
+function git_commit_diff() {
+   # Output an error message and exit if there aren't two arguments
+   if [ $# -ne 2 ]; then
+      echo "Error: this function requires two arguments"
+      return 1
+   fi
+
+   local commit1="$1"
+   local commit2="$2"
+
+   git range-diff "${commit1}"^! "${commit2}"^!
+}
+
 # Outputs a diff of two files, but only comparing the specified chunk of each file, and at arbitrary git revisions.
 function git_diff_chunks() {
    # Return if not in a git repo
