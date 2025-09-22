@@ -39,6 +39,9 @@ set cursorcolumn
 
 set nocompatible
 
+" Dynamically replace '%%' with '%:h' in Ex commands
+cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
 
 """"""""""""""""""""""""
 " Conditional settings
