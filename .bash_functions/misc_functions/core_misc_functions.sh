@@ -14,6 +14,24 @@ function my_test_function() {
    echo "EXP_VAR: $EXP_VAR"
 }
 
+# Finds the Bazel label for a source file. Searches in the current workspace by default,
+# but can take a second argument for an alternative repo to search in.
+function bflabel() {
+   # Output an error message and exit if there isn't at least one argument
+   if [ $# -lt 1 ]; then
+      echo "Error: this function requires at least one argument"
+      return 1
+   fi
+
+   local file_regex="$1"
+   local bazel_repo="@"
+   if [ $# -gt 1 ]; then
+      bazel_repo="$2"
+   fi
+
+   bq "filter('$file_regex', kind('source file', '${bazel_repo}//...:*'))" 2>/dev/null
+}
+
 # Invoke `cd` as normal, then run `ll` in the resulting directory
 function cdl() {
    # The `cd` Bash builtin treats a null argument (e.g. `cd ""`) as equivalent to
