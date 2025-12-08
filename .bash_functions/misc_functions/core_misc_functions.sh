@@ -14,6 +14,27 @@ function my_test_function() {
    echo "EXP_VAR: $EXP_VAR"
 }
 
+# A wrapper around `find` for quick searches. Searches in the current
+# directory by default, but can take a second argument for an alternative
+# starting directory.
+function search() {
+   # Output an error message and exit if there isn't at least one argument
+   if [ $# -lt 1 ]; then
+      echo "Error: this function requires at least one argument"
+      return 1
+   fi
+
+   local search_regex="$1"
+
+   local starting_location="."
+   if [ $# -gt 1 ]; then
+      starting_location="$2"
+   fi
+
+   # You need to wrap the search regex in `.*` for it to match partial matches
+   find "$starting_location" -regex ".*${search_regex}.*"
+}
+
 # Finds the Bazel label for a source file. Searches in the current workspace by default,
 # but can take a second argument for an alternative repo to search in.
 function bflabel() {
