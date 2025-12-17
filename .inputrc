@@ -1,0 +1,16 @@
+# Configuration for readline.
+# See https://www.man7.org/linux/man-pages/man3/readline.3.html
+
+# Remap forward search (C-s gets eaten up for some reason, something to do with flow control)
+"\es": forward-search-history
+
+# Allow quick toggling between emacs and vi editing modes
+set keymap emacs
+"\e\C-v": vi-editing-mode
+
+set keymap vi-insert
+"\C-e": emacs-editing-mode
+
+set keymap vi-command
+"\C-e": emacs-editing-mode
+
