@@ -36,6 +36,12 @@
    # Simple shorthand alias
    rl = reflog
 
+   # Detach at the current commit
+   dt = checkout -d HEAD
+
+   # Check out the previous commit that HEAD was pointing to
+   back = checkout -
+
    # Checks whether one commit "contains" another
    contains = "!git in-repo && f() { git merge-base --is-ancestor \"$2\" \"$1\" && echo yes || echo no; }; f"
 
