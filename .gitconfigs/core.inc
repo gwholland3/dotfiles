@@ -48,6 +48,9 @@
    # Runs `git prune` and also deletes the associated log file
    auto-prune = "!git in-repo && git prune && rm \"$(git rev-parse --show-toplevel)/.git/gc.log\""
 
+   # A version of `git bisect run` that uses a login shell. This makes e.g. functions available.
+   bisect-lrun = "!git bisect run bash -l -c '\"$0\" \"$@\"'"
+
    #exec =  "!$@ #"  ; Lol. See additional options below:
    #exec2 = "!$@;:"
    #exec3 = "!:;"
