@@ -14,6 +14,38 @@ function my_test_function() {
    echo "EXP_VAR: $EXP_VAR"
 }
 
+# A simple wrapper function that allows you to run a command
+# from a subdirectory and end up back in your original directory,
+# while preserving the exit status of your command.
+#
+# Example usage: run_from subdir ls -l
+function run_from() {
+   # Output an error message and exit if there isn't at least two arguments.
+   if [ $# -lt 2 ]; then
+      echo "Error: this function requires at least two arguments"
+      return 1
+   fi
+
+   # Capture user arguments.
+   local directory="$1"
+   local cmd=("${@:2}")
+
+   # Cd into the specified directory.
+   pushd "$directory" >/dev/null
+
+   # Run the user-provided command.
+   "${cmd[@]}"
+
+   # Save the exit status of the user-provided command.
+   local exit_status=$?
+
+   # Return to the original directory.
+   popd >/dev/null
+
+   # Pipe through the exit status.
+   return $exit_status
+}
+
 # A wrapper around `find` for quick searches. Searches in the current
 # directory by default, but can take a second argument for an alternative
 # starting directory.
