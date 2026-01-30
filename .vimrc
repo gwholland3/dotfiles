@@ -26,6 +26,10 @@ set autoindent
 set smartindent
 set nowrap
 
+" Highlight search matches, both while and after typing
+set hlsearch
+set incsearch
+
 " Allow moving the cursor via mouse click
 set mouse=a
 
