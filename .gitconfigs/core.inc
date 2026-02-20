@@ -18,9 +18,6 @@
    # corresponds with whether it's in a git repo.
    in-repo = rev-parse
 
-   # Output the name of the repo's default branch
-   mainb = !git in-repo && basename $(git symbolic-ref --short refs/remotes/origin/HEAD)
-
    # Checkout your local version of the repo's default branch
    go-main = !git checkout $(git mainb)
 
@@ -65,6 +62,9 @@
    # Check the corresponding documentation from the function
    # definitions for more about what these do.
    ###############################################################
+
+   # Functions that don't require arguments
+   mainb             = "!bash -l -c 'git_mainb'"
 
    # This strange way of invoking these Bash functions allows them to receive arguments
    wt-clean          = "!bash -l -c '\"$0\" \"$@\"' git_wt_clean"

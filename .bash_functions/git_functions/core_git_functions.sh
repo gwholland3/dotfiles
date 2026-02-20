@@ -2,6 +2,29 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Output the name of the repo's default branch
+function git_mainb() {
+   # Return if not in a git repo
+   git_repo_check
+
+   # If there is a remote called 'origin', return the branch pointed to by its HEAD.
+   if git remote | rg origin >/dev/null; then
+      basename $(git symbolic-ref --short refs/remotes/origin/HEAD)
+      return 0
+   fi
+
+   # Check if any common default branches exist, and return the first one found if so.
+   for b in main master trunk; do
+      if [ -n "$(git branch --list $b)" ]; then
+         echo $b
+         return 0
+      fi
+   done
+
+   # Fall back to the default branch used on init as a last resort.
+   git config --get init.defaultBranch
+}
+
 # Compares the diff of two commits using git range-diff
 function git_commit_diff() {
    # Output an error message and exit if there aren't two arguments
