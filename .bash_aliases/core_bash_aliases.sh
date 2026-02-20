@@ -40,7 +40,7 @@ alias bwhat='bazel query --output=label_kind'
 alias bwhere='bazel query --output=build'
 
 # Upgrades all outdated homebrew casks, except for brave-browser (because I don't like to restart my browser frequently)
-alias brew_cask_up='brew upgrade --cask $(brew outdated --cask --greedy | cut -d " " -f 1 | grep -v brave-browser | tr "\n" " ")'
+alias brew_cask_up='brew upgrade --cask $(brew outdated --cask --greedy | cut -d " " -f 1 | rg -v brave-browser | tr "\n" " ")'
 alias do_brew='brew update && brew upgrade && brew_cask_up && brew cleanup && brew doctor'
 
 # Misc
