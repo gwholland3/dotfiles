@@ -7,6 +7,9 @@ alias ls='ls -Gh'
 alias l.='ls -dlrt .* -Gh'
 alias ll='ls -lrt -Gh'
 
+# Miscellaneous shorthand commands
+alias rp='realpath'
+
 # Print your public IP address
 alias pubip='curl ipinfo.io/ip; echo'
 
@@ -17,6 +20,7 @@ alias notify='printf "\a"'
 alias dots='cd ~/Grant/GitHub\ Repos/dotfiles/'
 
 # Shorthand git commands
+alias g='git'
 alias gs='git status'
 alias gd='git diff'
 alias gl='git log'
