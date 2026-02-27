@@ -21,6 +21,10 @@
    # Checkout your local version of the repo's default branch
    go-main = !git checkout $(git mainb)
 
+   # Update the repo's default branch to what origin is pointing to.
+   syncm = !git fetch origin --update-head-ok $(git mainb):$(git mainb)
+
+   # Initiate an interactive rebase on just the commits in the current branch that have diverged from the default branch.
    irebase-self = !git rebase -i $(git merge-base HEAD $(git mainb))
 
    # Force push, but only if the remote branch hasn't been updated since the last fetch and its tip is still contained in the overriding branch
