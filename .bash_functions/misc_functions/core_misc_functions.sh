@@ -4,11 +4,13 @@
 
 # A function for testing/debugging
 function my_test_function() {
-   echo "$0"
+   echo Num args: "$#"
+
+   echo Arg0: "$0"
 
    for arg in "$@"
    do
-      echo "$arg"
+      echo Arg: "$arg"
    done
 
    echo "EXP_VAR: $EXP_VAR"
