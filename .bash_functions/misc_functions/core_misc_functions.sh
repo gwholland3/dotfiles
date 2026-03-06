@@ -16,6 +16,46 @@ function my_test_function() {
    echo "EXP_VAR: $EXP_VAR"
 }
 
+# Perform sed substitution across an entire directory (defaults to current directory).
+function replace() {
+   # Output an error message and exit if there isn't at least two arguments.
+   if [ $# -lt 2 ]; then
+      echo "Error: this function requires at least two arguments"
+      return 1
+   fi
+
+   # Capture user arguments.
+   local old="$1"
+   local new="$2"
+
+   local directory="."
+   if [ $# -ge 3 ]; then
+      directory="$3"
+   fi
+
+   # Store command since we need to use it twice.
+   local rg_cmd=(rg --hidden --files-with-matches -0 -e "$old" "$directory")
+
+   if ! "${rg_cmd[@]}" --quiet; then
+      echo "No matches found for pattern '$old'"
+      return 0
+   fi
+
+   # There is a difference between BSD sed (macOS) and GNU sed (Linux) that we need to account for.
+   if [[ "$OSTYPE" == "darwin"* ]]; then
+      local os_dependent_sed_inplace_edit_flags=(-i '')
+   else
+      local os_dependent_sed_inplace_edit_flags=(-i)
+   fi
+
+   # We need to run rg again (instead of storing the output from the first time we ran it in a variable and
+   # `echo`ing that to xargs) because Bash doesn't preserve null bytes in variables. The null byte separators
+   # are necessary to handle filepaths with spaces in them.
+   #
+   # We use `|` in the sed substitution syntax to handle filepaths in the arguments.
+   "${rg_cmd[@]}" | xargs -0 sed "${os_dependent_sed_inplace_edit_flags[@]}" "s|${old}|${new}|g"
+}
+
 # A simple wrapper function that allows you to run a command
 # from a subdirectory and end up back in your original directory,
 # while preserving the exit status of your command.
