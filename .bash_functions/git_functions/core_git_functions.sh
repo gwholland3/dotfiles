@@ -2,6 +2,18 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Commit all changes, including untracked files.
+function git_commita() {
+   # Return if not in a git repo
+   git_repo_check
+
+   # Get any user-provided args to `git commit`
+   local git_commit_args=("${@}")
+
+   git add -A
+   git commit "${git_commit_args[@]}"
+}
+
 # Output the name of the repo's default branch
 function git_mainb() {
    # Return if not in a git repo
@@ -66,7 +78,7 @@ function git_diff_chunks() {
 }
 
 # Finds which commits have deleted a line based on user-provided line regex. By default,
-# only searches three months back to reduce runtime, but this (and other `git log` params)
+# only searches three months back to reduce runtime, but this (and other `git log` args)
 # can be overridden via additional arguments to this function that are passed to `git log`.
 function git_ldel_commit() {
    # Output an error message and exit if there isn't at least one argument
@@ -78,11 +90,11 @@ function git_ldel_commit() {
    # User-provided regex for the deleted line to search for
    local line_regex="$1"
 
-   # Any additional params to pass to the `git log` command, such as specifying filepaths
+   # Any additional args to pass to the `git log` command, such as specifying filepaths
    # or requesting a longer search period.
    #
    # Store these as a Bash array so we can expand them into separate words later.
-   local git_log_params=("${@:2}")
+   local git_log_args=("${@:2}")
 
    # This is how Git represents line deletions in its patch output. We'll use this to
    # filter down to just commits that actually delete the line, not just contain it in
@@ -97,7 +109,7 @@ function git_ldel_commit() {
    #
    # By default, we only look for commits up to three months back, because otherwise this search
    # gets expensive. This can be overridden by the user if necessary.
-   git log -G"${line_regex}" --since='three months ago' --pretty='tformat:%H' "${git_log_params[@]}" |
+   git log -G"${line_regex}" --since='three months ago' --pretty='tformat:%H' "${git_log_args[@]}" |
       # Check if the read-in line has non-zero length as a secondary condition for entering the while
       # loop, to protect against outputs without a trailing newline.
       while IFS= read -r candidate_commit || [ -n "${candidate_commit}" ]; do
