@@ -21,6 +21,7 @@ alias dots='cd ~/Grant/GitHub\ Repos/dotfiles/'
 
 # Shorthand git commands
 alias g='git'
+__git_complete g git  # Map git completion to g alias.
 alias gs='git status'
 alias gd='git diff'
 alias gl='git log'
