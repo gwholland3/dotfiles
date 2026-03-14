@@ -2,6 +2,13 @@
 # Miscellaneous Bash Aliases #
 #----------------------------#
 
+# Guard to put in front of commands that should only be executed in interactive shells.
+function if_interactive() {
+   case "$-" in
+      *i*) "$@" ;;
+   esac
+}
+
 # Various shorthand ls commands
 alias ls='ls -Gh'
 alias l.='ls -dlrt .* -Gh'
@@ -21,7 +28,7 @@ alias dots='cd ~/Grant/GitHub\ Repos/dotfiles/'
 
 # Shorthand git commands
 alias g='git'
-__git_complete g git  # Map git completion to g alias.
+if_interactive __git_complete g git  # Map git completion to g alias.
 alias gs='git status'
 alias gd='git diff'
 alias gl='git log'
