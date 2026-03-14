@@ -28,7 +28,10 @@ alias dots='cd ~/Grant/GitHub\ Repos/dotfiles/'
 
 # Shorthand git commands
 alias g='git'
-if_interactive __git_complete g git  # Map git completion to g alias.
+if [ $SHELL != "/bin/zsh" ]; then
+   # zsh does this automatically with aliases.
+   if_interactive __git_complete g git  # Map git completion to g alias.
+fi
 alias gs='git status'
 alias gd='git diff'
 alias gl='git log'
