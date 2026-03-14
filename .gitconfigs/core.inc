@@ -36,9 +36,6 @@
    # Outputs the name of the branch that is currently checked out, or nothing if HEAD is not pointing to a branch
    thisb = branch --show-current
 
-   # Simple shorthand alias
-   rl = reflog
-
    # Detach at the current commit
    dt = checkout -d HEAD
 
@@ -53,6 +50,10 @@
 
    # A version of `git bisect run` that uses a login shell. This makes e.g. functions available.
    bisect-lrun = "!git bisect run bash -l -c '\"$0\" \"$@\"'"
+
+   # Simple shorthand aliases.
+   ca = commita
+   rl = reflog
 
    #exec =  "!$@ #"  ; Lol. See additional options below:
    #exec2 = "!$@;:"
