@@ -2,6 +2,17 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Activate fuzzy search on git branches, and checkout the selected one.
+function git_findb() {
+   # Return if not in a git repo
+   git_repo_check
+
+   local selected_branch=$(git branch --format='%(refname:short)' | fzf)
+   if [ -n "$selected_branch" ]; then
+      git checkout "$selected_branch"
+   fi
+}
+
 # Commit all changes, including untracked files.
 function git_commita() {
    # Return if not in a git repo

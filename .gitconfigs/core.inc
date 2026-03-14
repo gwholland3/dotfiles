@@ -71,11 +71,12 @@
 
    # Functions that don't require arguments
    mainb             = "!bash -l -c 'git_mainb'"
+   findb             = "!bash -l -c 'git_findb'"
+   now               = "!bash -l -c 'git_now'"
+   sync              = "!bash -l -c 'git_sync'"
+   wt-clean          = "!bash -l -c 'git_wt-clean'"
 
    # This strange way of invoking these Bash functions allows them to receive arguments
-   wt-clean          = "!bash -l -c '\"$0\" \"$@\"' git_wt_clean"
-   sync              = "!bash -l -c '\"$0\" \"$@\"' git_sync"
-   now               = "!bash -l -c '\"$0\" \"$@\"' git_now"
    get-branch        = "!bash -l -c '\"$0\" \"$@\"' git_get_branch"
    delete-b          = "!bash -l -c '\"$0\" \"$@\"' git_delete_b"
    squash            = "!bash -l -c '\"$0\" \"$@\"' git_squash"
@@ -84,6 +85,7 @@
    diff-chunks       = "!bash -l -c '\"$0\" \"$@\"' git_diff_chunks"
    commit-diff       = "!bash -l -c '\"$0\" \"$@\"' git_commit_diff"
    commita           = "!bash -l -c '\"$0\" \"$@\"' git_commita"
+
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
 	rebase = false
