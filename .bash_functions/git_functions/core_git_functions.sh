@@ -313,7 +313,7 @@ alias g_get_branch='git_get_branch'
 # It checks if it recognizes the subcommand as a valid custom alias and executes
 # the corresponding function if so. Otherwise, it executes git normally.
 function g() {
-   local git_subcommand="{$1:-}"
+   local git_subcommand="${1:-}"
 
    case "$git_subcommand" in
       # Aliases that accept arguments.
@@ -360,4 +360,11 @@ function g() {
          ;;
    esac
 }
+# Set up git completion for my wrapper.
+# zsh and bash have different completion systems.
+if [ $SHELL == "/bin/zsh" ]; then
+   compdef g=git
+else
+   __git_complete g git
+fi
 
