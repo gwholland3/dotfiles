@@ -12,6 +12,7 @@ function git_findb() {
       git checkout "$selected_branch"
    fi
 }
+alias g_findb='git_findb'
 
 # Commit all changes, including untracked files.
 function git_commita() {
@@ -24,6 +25,7 @@ function git_commita() {
    git add -A
    git commit "${git_commit_args[@]}"
 }
+alias g_commita='git_commita'
 
 # Output the name of the repo's default branch
 function git_mainb() {
@@ -47,6 +49,7 @@ function git_mainb() {
    # Fall back to the default branch used on init as a last resort.
    git config --get init.defaultBranch
 }
+alias g_mainb='git_mainb'
 
 # Compares the diff of two commits using git range-diff
 function git_commit_diff() {
@@ -61,6 +64,7 @@ function git_commit_diff() {
 
    git range-diff "${commit1}"^! "${commit2}"^!
 }
+alias g_commit_diff='git_commit_diff'
 
 # Outputs a diff of two files, but only comparing the specified chunk of each file, and at arbitrary git revisions.
 function git_diff_chunks() {
@@ -87,6 +91,7 @@ function git_diff_chunks() {
       <(git show "${first_file_commit}":"${first_file_path}" | sed -n "${first_file_start_line},${first_file_end_line}p") \
       <(git show "${second_file_commit}":"${second_file_path}" | sed -n "${second_file_start_line},${second_file_end_line}p")
 }
+alias g_diff_chunks='git_diff_chunks'
 
 # Finds which commits have deleted a line based on user-provided line regex. By default,
 # only searches three months back to reduce runtime, but this (and other `git log` args)
@@ -127,6 +132,7 @@ function git_ldel_commit() {
          git show "${candidate_commit}" | rg --quiet "${deletion_regex}.*${line_regex}" && git show "${candidate_commit}" --no-patch
       done
 }
+alias g_ldel_commit='git_ldel_commit'
 
 # Takes two Git revisions as arguments, which are assumed to be an old head commit
 # on a PR and a new head commit. Performs a diff of the two revisions, given the
@@ -146,6 +152,7 @@ function git_pr_diff() {
 
    git range-diff $(git mainb)@{upstream} "${old_ref}" "${new_ref}"
 }
+alias g_pr_diff='git_pr_diff'
 
 # Squash all the commits on the current feature branch into one, keeping the commit message
 # of the first.
@@ -193,6 +200,7 @@ function git_squash() {
    # Create a new, squashed commit with all the changes on the feature branch.
    git commit -m "$first_commit_msg"
 }
+alias g_squash='git_squash'
 
 # Attempt to force delete the specified branch name from both remote and local.
 function git_delete_b() {
@@ -218,6 +226,7 @@ function git_delete_b() {
    git push -d origin "$branch_to_delete"
    git branch -D "$branch_to_delete"
 }
+alias g_delete_b='git_delete_b'
 
 # Check if the worktree is clean. Exit code 0 if there are no local changes, 1 otherwise.
 function git_wt_clean() {
@@ -227,6 +236,7 @@ function git_wt_clean() {
    # The "short" output of `git status` should contain nothing if the worktree is clean
    [ -z "$(git status -s)" ]
 }
+alias g_wt_clean='git_wt_clean'
 
 # Checkout the main branch and updated it from remote
 function git_now() {
@@ -239,6 +249,7 @@ function git_now() {
    git checkout $(git mainb)
    git pull -p
 }
+alias g_now='git_now'
 
 # Fetch from origin AND update the default branch locally, but remain on the original branch
 # from which you ran the command, with all uncommitted changes preserved
@@ -269,6 +280,7 @@ function git_sync() {
       git stash pop
    fi
 }
+alias g_sync='git_sync'
 
 # Checks out a tracking branch for the specified remote branch locally. Automatically syncs
 # with the remote first in case the branch was created after your most recent fetch, and
@@ -292,4 +304,5 @@ function git_get_branch() {
    git checkout "$branch_name"
    git reset --hard origin/"$branch_name"
 }
+alias g_get_branch='git_get_branch'
 
