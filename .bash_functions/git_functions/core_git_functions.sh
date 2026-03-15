@@ -306,3 +306,58 @@ function git_get_branch() {
 }
 alias g_get_branch='git_get_branch'
 
+# My wrapper around git, which allows me to define custom git aliases capable of
+# performing arbitrary logic, including using other personal utility functions
+# without the overhead of asking git to start up a new login shell.
+#
+# It checks if it recognizes the subcommand as a valid custom alias and executes
+# the corresponding function if so. Otherwise, it executes git normally.
+function g() {
+   local git_subcommand="{$1:-}"
+
+   case "$git_subcommand" in
+      # Aliases that accept arguments.
+      commita)
+         git_commita "${@:2}"
+         ;;
+      commit-diff)
+         git_commit_diff "${@:2}"
+         ;;
+      diff-chunks)
+         git_diff_chunks "${@:2}"
+         ;;
+      ldel-commit)
+         git_ldel_commit "${@:2}"
+         ;;
+      pr-diff)
+         git_pr_diff "${@:2}"
+         ;;
+      squash)
+         git_squash "${@:2}"
+         ;;
+      delete-b)
+         git_delete_b "${@:2}"
+         ;;
+      get-branch)
+         git_get_branch "${@:2}"
+         ;;
+      # Aliases that do not accept arguments.
+      findb)
+         git_findb
+         ;;
+      mainb)
+         git_mainb
+         ;;
+      wt-clean)
+         git_wt_clean
+         ;;
+      sync)
+         git_sync
+         ;;
+      # No alias found, execute git normally.
+      *)
+         git "${@}"
+         ;;
+   esac
+}
+
