@@ -5,12 +5,12 @@ if [ -n "$BASH_VERSION" ]; then
    shopt -s expand_aliases
 fi
 
-if [ -f ~/.bash_aliases/bash_aliases.sh ]; then
-    . ~/.bash_aliases/bash_aliases.sh
+if [ -f ~/.shell_aliases/shell_aliases.sh ]; then
+    . ~/.shell_aliases/shell_aliases.sh
 fi
 
-if [ -f ~/.bash_functions/bash_functions.sh ]; then
-    . ~/.bash_functions/bash_functions.sh
+if [ -f ~/.shell_functions/shell_functions.sh ]; then
+    . ~/.shell_functions/shell_functions.sh
 fi
 
 # Make my custom binaries available
