@@ -52,8 +52,9 @@ function replace() {
    # `echo`ing that to xargs) because Bash doesn't preserve null bytes in variables. The null byte separators
    # are necessary to handle filepaths with spaces in them.
    #
-   # We use `|` in the sed substitution syntax to handle filepaths in the arguments.
-   "${rg_cmd[@]}" | xargs -0 sed "${os_dependent_sed_inplace_edit_flags[@]}" "s|${old}|${new}|g"
+   # We use `|` in the perl substitution syntax to handle filepaths in the arguments.
+   # We use perl instead of sed because it uses the same regex interpreter as rg.
+   "${rg_cmd[@]}" | xargs -0 perl -i -pe "s|${old}|${new}|g"
 }
 
 # A simple wrapper function that allows you to run a command
