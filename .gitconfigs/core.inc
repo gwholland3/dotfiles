@@ -75,7 +75,7 @@
    findb             = "!bash -l -c 'git_findb'"
    now               = "!bash -l -c 'git_now'"
    sync              = "!bash -l -c 'git_sync'"
-   wt-clean          = "!bash -l -c 'git_wt-clean'"
+   wt-clean          = "!bash -l -c 'git_wt_clean'"
 
    # This strange way of invoking these Bash functions allows them to receive arguments
    get-branch        = "!bash -l -c '\"$0\" \"$@\"' git_get_branch"
