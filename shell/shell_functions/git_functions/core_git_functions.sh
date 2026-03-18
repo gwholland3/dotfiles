@@ -362,7 +362,7 @@ function g() {
 }
 # Set up git completion for my wrapper.
 # zsh and bash have different completion systems.
-if [ $SHELL == "/bin/zsh" ]; then
+if [ $SHELL = "/bin/zsh" ]; then
    compdef g=git
 else
    __git_complete g git
