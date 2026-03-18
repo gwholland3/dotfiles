@@ -6,12 +6,10 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 if [ -f ~/.shell_setup/shell_aliases/shell_aliases.sh ]; then
-   echo alias
     . ~/.shell_setup/shell_aliases/shell_aliases.sh
 fi
 
 if [ -f ~/.shell_setup/shell_functions/shell_functions.sh ]; then
-   echo function
     . ~/.shell_setup/shell_functions/shell_functions.sh
 fi
 
