@@ -27,18 +27,18 @@ alias notify='printf "\a"'
 alias dots='cd ~/Grant/GitHub\ Repos/dotfiles/'
 
 # Shorthand git commands
-alias gs='git status'
-alias gd='git diff'
-alias gl='git log'
+alias gs='g status'
+alias gd='g diff'
+alias gl='g log'
 
 # For use in git-related shell functions: return from the function if not in a git repo
-alias git_repo_check='git in-repo || return 1'
+alias git_repo_check='g in-repo || return 1'
 
 # For use in git-related shell functions: return from the function if there are local changes, with error message
-alias git_wt_clean_check='git wt-clean || (echo "You have local changes. Please commit or stash them."; return 1) || return 1'
+alias git_wt_clean_check='g wt-clean || (echo "You have local changes. Please commit or stash them."; return 1) || return 1'
 
 # Produces a nicely-colored diff
-alias pretty_diff='git diff --no-index --'
+alias pretty_diff='g diff --no-index --'
 
 # Shorthand Bazel commands
 alias bb='bazel build'

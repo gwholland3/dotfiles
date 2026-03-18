@@ -2,14 +2,63 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# A version of `git bisect run` that uses a login shell. This makes e.g. functions available.
+function git_bisect_lrun() {
+   g bisect run sh -l -c '"$0" "$@"'
+}
+alias g_bisect_lrun='git_bisect_lrun'
+
+# Runs `git prune` and also deletes the associated log file
+function git_auto_prune() {
+   # Return if not in a git repo
+   git_repo_check
+
+   g prune \
+   && rm "$(g rev-parse --show-toplevel)/.git/gc.log"
+}
+alias g_auto_prune='git_auto_prune'
+
+# Checks whether one commit "contains" another
+function git_contains() {
+   # Return if not in a git repo
+   git_repo_check
+
+   local candidate_child_commit="$1"
+   local candidate_parent_commit="$2"
+
+   g merge-base --is-ancestor "$candidate_parent_commit" "$candidate_child_commit" \
+      && echo yes \
+      || echo no
+}
+alias g_contains='git_contains'
+
+# Initiate an interactive rebase on just the commits in the current branch that
+# have diverged from the default branch.
+function git_irebase_self() {
+   g rebase -i $(g merge-base HEAD $(g mainb))
+}
+alias g_irebase_self='git_irebase_self'
+
+# Update the repo's default branch to what origin is pointing to.
+function git_syncm() {
+   g fetch origin --update-head-ok $(g mainb):$(g mainb)
+}
+alias g_syncm='git_syncm'
+
+# Checkout your local version of the repo's default branch
+function git_go_main() {
+   g checkout $(g mainb)
+}
+alias g_go_main='git_go_main'
+
 # Activate fuzzy search on git branches, and checkout the selected one.
 function git_findb() {
    # Return if not in a git repo
    git_repo_check
 
-   local selected_branch=$(git branch --format='%(refname:short)' | fzf)
+   local selected_branch=$(g branch --format='%(refname:short)' | fzf)
    if [ -n "$selected_branch" ]; then
-      git checkout "$selected_branch"
+      g checkout "$selected_branch"
    fi
 }
 alias g_findb='git_findb'
@@ -22,8 +71,8 @@ function git_commita() {
    # Get any user-provided args to `git commit`
    local git_commit_args=("${@}")
 
-   git add -A
-   git commit "${git_commit_args[@]}"
+   g add -A
+   g commit "${git_commit_args[@]}"
 }
 alias g_commita='git_commita'
 
@@ -33,21 +82,21 @@ function git_mainb() {
    git_repo_check
 
    # If there is a remote called 'origin', return the branch pointed to by its HEAD.
-   if git remote | rg origin >/dev/null; then
-      basename $(git symbolic-ref --short refs/remotes/origin/HEAD)
+   if g remote | rg origin >/dev/null; then
+      basename $(g symbolic-ref --short refs/remotes/origin/HEAD)
       return 0
    fi
 
    # Check if any common default branches exist, and return the first one found if so.
    for b in main master trunk; do
-      if [ -n "$(git branch --list $b)" ]; then
+      if [ -n "$(g branch --list $b)" ]; then
          echo $b
          return 0
       fi
    done
 
    # Fall back to the default branch used on init as a last resort.
-   git config --get init.defaultBranch
+   g config --get init.defaultBranch
 }
 alias g_mainb='git_mainb'
 
@@ -62,7 +111,7 @@ function git_commit_diff() {
    local commit1="$1"
    local commit2="$2"
 
-   git range-diff "${commit1}"^! "${commit2}"^!
+   g range-diff "${commit1}"^! "${commit2}"^!
 }
 alias g_commit_diff='git_commit_diff'
 
@@ -88,8 +137,8 @@ function git_diff_chunks() {
    local second_file_end_line="$8"
 
    diff -u \
-      <(git show "${first_file_commit}":"${first_file_path}" | sed -n "${first_file_start_line},${first_file_end_line}p") \
-      <(git show "${second_file_commit}":"${second_file_path}" | sed -n "${second_file_start_line},${second_file_end_line}p")
+      <(g show "${first_file_commit}":"${first_file_path}" | sed -n "${first_file_start_line},${first_file_end_line}p") \
+      <(g show "${second_file_commit}":"${second_file_path}" | sed -n "${second_file_start_line},${second_file_end_line}p")
 }
 alias g_diff_chunks='git_diff_chunks'
 
@@ -125,11 +174,11 @@ function git_ldel_commit() {
    #
    # By default, we only look for commits up to three months back, because otherwise this search
    # gets expensive. This can be overridden by the user if necessary.
-   git log -G"${line_regex}" --since='three months ago' --pretty='tformat:%H' "${git_log_args[@]}" |
+   g log -G"${line_regex}" --since='three months ago' --pretty='tformat:%H' "${git_log_args[@]}" |
       # Check if the read-in line has non-zero length as a secondary condition for entering the while
       # loop, to protect against outputs without a trailing newline.
       while IFS= read -r candidate_commit || [ -n "${candidate_commit}" ]; do
-         git show "${candidate_commit}" | rg --quiet "${deletion_regex}.*${line_regex}" && git show "${candidate_commit}" --no-patch
+         g show "${candidate_commit}" | rg --quiet "${deletion_regex}.*${line_regex}" && g show "${candidate_commit}" --no-patch
       done
 }
 alias g_ldel_commit='git_ldel_commit'
@@ -150,7 +199,7 @@ function git_pr_diff() {
    local old_ref="$1"
    local new_ref="$2"
 
-   git range-diff $(git mainb)@{upstream} "${old_ref}" "${new_ref}"
+   g range-diff $(g mainb)@{upstream} "${old_ref}" "${new_ref}"
 }
 alias g_pr_diff='git_pr_diff'
 
@@ -170,7 +219,7 @@ function git_squash() {
 
    # Determine the name of the destination branch that the current feature branch is
    # being merged into. This allows us to deduce the first commit on the feature branch.
-   local destination_branch="origin/$(git mainb)"
+   local destination_branch="origin/$(g mainb)"
    if [ $# -gt 0 ]; then
       destination_branch="origin/$1"
       if [ $# -gt 1 ] && [ "$2" == "-l" ]; then
@@ -180,7 +229,7 @@ function git_squash() {
 
    # Find the merge-base commit between the feature and destination branches.
    local merge_base_commit
-   merge_base_commit="$(git merge-base HEAD "$destination_branch")"
+   merge_base_commit="$(g merge-base HEAD "$destination_branch")"
 
    # If the previous command failed, assume the provided destination branch name was bad
    # and bail out.
@@ -191,14 +240,14 @@ function git_squash() {
 
    # Reset us back to the merge-base commit, but retain all the changes made on the
    # feature branch so far.
-   git reset --soft "$merge_base_commit"
+   g reset --soft "$merge_base_commit"
    
    # Grab the commit message from the first commit on the feature branch. This is the message
    # we'll use for our final squashed commit.
-   local first_commit_msg="$(git log --reverse --format=%B HEAD..HEAD@{1} | head -n 1)"
+   local first_commit_msg="$(g log --reverse --format=%B HEAD..HEAD@{1} | head -n 1)"
 
    # Create a new, squashed commit with all the changes on the feature branch.
-   git commit -m "$first_commit_msg"
+   g commit -m "$first_commit_msg"
 }
 alias g_squash='git_squash'
 
@@ -214,17 +263,17 @@ function git_delete_b() {
 
    # If we currently have to to-be-deleted branch checked out,
    # first check out the main branch instead
-   local current_branch="$(git rev-parse --abbrev-ref HEAD)"
+   local current_branch="$(g rev-parse --abbrev-ref HEAD)"
    if [ "$current_branch" == "$branch_to_delete" ]; then
       echo "Branch to be deleted is currently checked out, switching to repository main branch"
-      git checkout "$(git mainb)"
+      g checkout "$(g mainb)"
    fi
 
    # First attempt to delete the branch on the remote, then
    # try to delete it locally. If either branch doesn't exist,
    # git already has its own helpful error messages.
-   git push -d origin "$branch_to_delete"
-   git branch -D "$branch_to_delete"
+   g push -d origin "$branch_to_delete"
+   g branch -D "$branch_to_delete"
 }
 alias g_delete_b='git_delete_b'
 
@@ -234,7 +283,7 @@ function git_wt_clean() {
    git_repo_check
    
    # The "short" output of `git status` should contain nothing if the worktree is clean
-   [ -z "$(git status -s)" ]
+   [ -z "$(g status -s)" ]
 }
 alias g_wt_clean='git_wt_clean'
 
@@ -246,8 +295,8 @@ function git_now() {
    # Return if there are local changes
    git_wt_clean_check
 
-   git checkout $(git mainb)
-   git pull -p
+   g checkout $(g mainb)
+   g pull -p
 }
 alias g_now='git_now'
 
@@ -265,19 +314,19 @@ function git_sync() {
 
    if [ "${wt_clean}" -ne 0 ]; then
       # Stash uncommitted changes, including untracked files
-      git stash push -u
+      g stash push -u
    fi
 
    # Checkout the repo's default branch, fetch from remote, and update the branch
-   git checkout "$(git mainb)"
-   git pull -p
+   g checkout "$(g mainb)"
+   g pull -p
 
    # Return to the original branch
-   git checkout -
+   g checkout -
 
    if [ "${wt_clean}" -ne 0 ]; then
       # Restore any uncommitted changes on the original branch
-      git stash pop
+      g stash pop
    fi
 }
 alias g_sync='git_sync'
@@ -298,11 +347,11 @@ function git_get_branch() {
    local branch_name="$1"
 
    # Pull latest state from remote
-   git sync
+   g sync
 
    # Check out requested branch locally, and align it with remote if necessary
-   git checkout "$branch_name"
-   git reset --hard origin/"$branch_name"
+   g checkout "$branch_name"
+   g reset --hard origin/"$branch_name"
 }
 alias g_get_branch='git_get_branch'
 
@@ -317,7 +366,7 @@ function g() {
 
    case "$git_subcommand" in
       # Aliases that accept arguments.
-      commita)
+      commita|ca)
          git_commita "${@:2}"
          ;;
       commit-diff)

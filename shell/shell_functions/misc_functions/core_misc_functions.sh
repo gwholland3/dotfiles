@@ -41,13 +41,6 @@ function replace() {
       return 0
    fi
 
-   # There is a difference between BSD sed (macOS) and GNU sed (Linux) that we need to account for.
-   if [[ "$OSTYPE" == "darwin"* ]]; then
-      local os_dependent_sed_inplace_edit_flags=(-i '')
-   else
-      local os_dependent_sed_inplace_edit_flags=(-i)
-   fi
-
    # We need to run rg again (instead of storing the output from the first time we ran it in a variable and
    # `echo`ing that to xargs) because Bash doesn't preserve null bytes in variables. The null byte separators
    # are necessary to handle filepaths with spaces in them.

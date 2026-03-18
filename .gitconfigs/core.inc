@@ -18,15 +18,6 @@
    # corresponds with whether it's in a git repo.
    in-repo = rev-parse
 
-   # Checkout your local version of the repo's default branch
-   go-main = !git checkout $(git mainb)
-
-   # Update the repo's default branch to what origin is pointing to.
-   syncm = !git fetch origin --update-head-ok $(git mainb):$(git mainb)
-
-   # Initiate an interactive rebase on just the commits in the current branch that have diverged from the default branch.
-   irebase-self = !git rebase -i $(git merge-base HEAD $(git mainb))
-
    # Force push, but only if the remote branch hasn't been updated since the last fetch and its tip is still contained in the overriding branch
 	pushfl = push --force-with-lease --force-if-includes
 
@@ -42,17 +33,7 @@
    # Check out the previous commit that HEAD was pointing to
    back = checkout -
 
-   # Checks whether one commit "contains" another
-   contains = "!git in-repo && f() { git merge-base --is-ancestor \"$2\" \"$1\" && echo yes || echo no; }; f"
-
-   # Runs `git prune` and also deletes the associated log file
-   auto-prune = "!git in-repo && git prune && rm \"$(git rev-parse --show-toplevel)/.git/gc.log\""
-
-   # A version of `git bisect run` that uses a login shell. This makes e.g. functions available.
-   bisect-lrun = "!git bisect run bash -l -c '\"$0\" \"$@\"'"
-
    # Simple shorthand aliases.
-   ca = commita
    rl = reflog
 
    #exec =  "!$@ #"  ; Lol. See additional options below:
@@ -60,9 +41,9 @@
    #exec3 = "!:;"
 
    ###############################################################
-   # BASH FUNCTIONS 
+   # SHELL FUNCTIONS 
    #
-   # I have to request git to launch a login bash shell in
+   # I have to request git to launch a login shell in
    # order for these functions to be available for use
    # as a git alias.
    #
@@ -72,10 +53,14 @@
 
    # Functions that don't require arguments
    mainb             = "!bash -l -c 'git_mainb'"
+   go-main           = "!bash -l -c 'git_go_main'"
    findb             = "!bash -l -c 'git_findb'"
    now               = "!bash -l -c 'git_now'"
    sync              = "!bash -l -c 'git_sync'"
+   syncm             = "!bash -l -c 'git_syncm'"
    wt-clean          = "!bash -l -c 'git_wt_clean'"
+   irebase-self      = "!bash -l -c 'git_irebase_self'"
+   auto-prune        = "!bash -l -c 'git_auto_prune'"
 
    # This strange way of invoking these Bash functions allows them to receive arguments
    get-branch        = "!bash -l -c '\"$0\" \"$@\"' git_get_branch"
@@ -86,6 +71,9 @@
    diff-chunks       = "!bash -l -c '\"$0\" \"$@\"' git_diff_chunks"
    commit-diff       = "!bash -l -c '\"$0\" \"$@\"' git_commit_diff"
    commita           = "!bash -l -c '\"$0\" \"$@\"' git_commita"
+   ca                = "!bash -l -c '\"$0\" \"$@\"' git_commita"
+   contains          = "!bash -l -c '\"$0\" \"$@\"' git_contains"
+   bisect-lrun       = "!bash -l -c '\"$0\" \"$@\"' git_bisect_lrun"
 
 [pull]
    # When running git pull, do not rebase current branch on top of upstream branch should it have diverged
