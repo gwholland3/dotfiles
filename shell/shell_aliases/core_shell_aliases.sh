@@ -28,6 +28,8 @@ alias dots='cd ~/Grant/GitHub\ Repos/dotfiles/'
 
 # Shorthand git commands
 alias gs='g status'
+alias ga='g add'
+alias gc='g commit'
 alias gd='g diff'
 alias gl='g log'
 
