@@ -251,6 +251,23 @@ function git_squash() {
 }
 alias g_squash='git_squash'
 
+# Same as git_squash, but automatically force pushes after squashing.
+function git_squashp() {
+   # Save off any arguments so we can pass them along to git_squash.
+   local git_squash_args=("${@}")
+
+   g squash "${git_squash_args[@]}"
+
+   # Don't force push if the squash didn't succeed.
+   if [ $? -ne 0 ]; then
+      echo "Squash failed. Not force pushing."
+      return 1
+   fi
+
+   g pushfl
+}
+alias g_squashp='git_squashp'
+
 # Attempt to force delete the specified branch name from both remote and local.
 function git_delete_b() {
    # Return if not in a git repo
@@ -383,6 +400,9 @@ function g() {
          ;;
       squash)
          git_squash "${@:2}"
+         ;;
+      squashp)
+         git_squashp "${@:2}"
          ;;
       delete-b)
          git_delete_b "${@:2}"
