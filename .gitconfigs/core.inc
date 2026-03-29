@@ -3,6 +3,18 @@
 [core]
    # Do not automatically convert line endings in the working directory to CRLF
 	autocrlf = input
+
+   # Use git-delta for paging.
+   pager = delta
+[interactive]
+   # User git-delta for displaying diffs during interactive git operations (like `git add -p`).
+   diffFilter = delta --color-only
+[delta]
+   # Allow the use of n and N to jump between diff sections while viewing output of git-delta.
+   navigate = true
+[merge]
+   # Use a newer, cooler method for displaying merge conflicts.
+   conflictStyle = zdiff3
 [color]
    # Use color when outputting to the terminal
 	ui = auto
