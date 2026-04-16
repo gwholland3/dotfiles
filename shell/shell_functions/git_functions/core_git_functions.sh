@@ -2,6 +2,26 @@
 # Bash Functions for Git       #
 #------------------------------#
 
+# Shorthand git commands
+function gs() { g status "$@"; }
+function ga() { g add "$@"; }
+function gc() { g commit "$@"; }
+function gd() { g diff "$@"; }
+function gl() { g log "$@"; }
+
+function nohooks() {
+   # Output an error message and exit if there isn't at least one argument.
+   if [ $# -lt 1 ]; then
+      echo "Error: this function requires at least one argument"
+      return 1
+   fi
+
+   GIT_CONFIG_COUNT=1 \
+   GIT_CONFIG_KEY_0=core.hooksPath \
+   GIT_CONFIG_VALUE_0=/dev/null \
+   "$@"
+}
+
 # A version of `git bisect run` that uses a login shell. This makes e.g. functions available.
 function git_bisect_lrun() {
    g bisect run sh -l -c '"$0" "$@"'

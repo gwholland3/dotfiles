@@ -26,13 +26,6 @@ alias notify='printf "\a"'
 # cd into my dotfiles repo
 alias dots='cd ~/Grant/GitHub\ Repos/dotfiles/'
 
-# Shorthand git commands
-alias gs='g status'
-alias ga='g add'
-alias gc='g commit'
-alias gd='g diff'
-alias gl='g log'
-
 # For use in git-related shell functions: return from the function if not in a git repo
 alias git_repo_check='g in-repo || return 1'
 
