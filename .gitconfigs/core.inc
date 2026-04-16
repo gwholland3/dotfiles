@@ -30,6 +30,9 @@
    # corresponds with whether it's in a git repo.
    in-repo = rev-parse
 
+   # Update the most recent commit to be authored by me.
+   mine = commit --amend --no-edit --reset-author
+
    # Force push, but only if the remote branch hasn't been updated since the last fetch and its tip is still contained in the overriding branch
 	pushfl = push --force-with-lease --force-if-includes
 
