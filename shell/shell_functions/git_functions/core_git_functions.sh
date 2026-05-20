@@ -332,7 +332,7 @@ function git_now() {
    # Return if there are local changes
    git_wt_clean_check
 
-   g checkout $(g mainb)
+   g go-main
    g pull -p
 }
 alias g_now='git_now'
