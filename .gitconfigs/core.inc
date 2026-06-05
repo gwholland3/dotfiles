@@ -22,6 +22,9 @@
    # Very pretty logging output
 	lg = log --graph --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --author-date-order
 
+   # Shorthand alias.
+   m = go-main
+
    # Show the last commit that touched a file, even if that file has been deleted (relative to HEAD)
 	fdel-commit = log -1 --
 
