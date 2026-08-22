@@ -9,6 +9,58 @@ function gc() { g commit "$@"; }
 function gd() { g diff "$@"; }
 function gl() { g log "$@"; }
 
+# Rename a branch. If the branch also has a remote tracking branch, push the
+# rename to remote too.
+function git_rename_b() {
+   # Output an error message and exit if there isn't at least one argument.
+   if [ $# -lt 1 ]; then
+      echo "Error: this function requires at least one argument"
+      return 1
+   fi
+
+   local old_branch_name
+   local new_branch_name
+
+   # Only one argument means to rename the current branch.
+   if [ $# -eq 1 ]; then
+      old_branch_name=$(g thisb)
+      new_branch_name="$1"
+   else
+      old_branch_name="$1"
+      new_branch_name="$2"
+   fi
+
+   # Check for user error; this could cause us to delete the original branch on remote.
+   if [ "$old_branch_name" = "$new_branch_name" ]; then
+      echo "Error: old and new branch names are the same ('$old_branch_name')"
+      return 1
+   fi
+
+   # Before renaming, check if the local branch had a remote tracking branch that we
+   # also need to rename.
+   #
+   # It should be safe to do this check _after_ renaming too, but this is clearer.
+   local has_upstream=false
+   if git rev-parse --verify --quiet "${old_branch_name}@{upstream}" >/dev/null 2>&1; then
+      has_upstream=true
+   fi
+
+   # Rename the local branch.
+   g branch --move "$old_branch_name" "$new_branch_name"
+
+   # Only interact with remote if the local branch had a remote tracking branch
+   # that also needs to be renamed.
+   if [ "$has_upstream" = true ]; then
+      # Push the new branch to remote.
+      g push origin -u "$new_branch_name"
+
+      # Delete the old branch from remote.
+      g push origin --delete "$old_branch_name"
+   fi
+}
+alias g_rename_b='git_rename_b'
+
+# Execute a command with all Git hooks disabled.
 function nohooks() {
    # Output an error message and exit if there isn't at least one argument.
    if [ $# -lt 1 ]; then
@@ -435,6 +487,9 @@ function g() {
       delete-b)
          git_delete_b "${@:2}"
          ;;
+      rename-b)
+         git_rename_b "${@:2}"
+         ;;
       get-branch)
          git_get_branch "${@:2}"
          ;;
@@ -462,6 +517,11 @@ function g() {
 }
 # Set up git completion for my wrapper.
 # zsh and bash have different completion systems.
+#
+# Note that in order for the aliases defined above to autocomplete,
+# they need to be recognized as git subcommands too. Because of this,
+# I still map each alias to its underlying shell function in my
+# .gitconfig, even though they are always executed through my wrapper.
 if [ $SHELL = "/bin/zsh" ]; then
    compdef g=git
 # Make sure the function is available before we call it

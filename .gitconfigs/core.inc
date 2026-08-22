@@ -83,6 +83,7 @@
    # This strange way of invoking these Bash functions allows them to receive arguments
    get-branch        = "!bash -l -c '\"$0\" \"$@\"' git_get_branch"
    delete-b          = "!bash -l -c '\"$0\" \"$@\"' git_delete_b"
+   rename-b          = "!bash -l -c '\"$0\" \"$@\"' git_rename_b"
    squash            = "!bash -l -c '\"$0\" \"$@\"' git_squash"
    pr-diff           = "!bash -l -c '\"$0\" \"$@\"' git_pr_diff"
    ldel-commit       = "!bash -l -c '\"$0\" \"$@\"' git_ldel_commit"
