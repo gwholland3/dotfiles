@@ -102,9 +102,17 @@ function git_mainb() {
    git_repo_check
 
    # If there is a remote called 'origin', return the branch pointed to by its HEAD.
-   if g remote | rg origin >/dev/null; then
-      basename $(g symbolic-ref --short refs/remotes/origin/HEAD)
-      return 0
+   if g remote | rg -q '^origin$'; then
+      if origin_head=$(g symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null); then
+         # origin_head looks like "origin/main" → we just want "main"
+         basename "$origin_head"
+         return 0
+      else
+         echo "Warning: refs/remotes/origin/HEAD is not set for origin." >&2
+         echo "You can set it locally with: git remote set-head origin -a" >&2
+         echo "Falling back to other methods..." >&2
+         # fall through to the later fallbacks
+      fi
    fi
 
    # Check if any common default branches exist, and return the first one found if so.
