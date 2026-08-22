@@ -445,6 +445,9 @@ function g() {
       mainb)
          git_mainb
          ;;
+      go-main|m)
+         git_go_main
+         ;;
       wt-clean)
          git_wt_clean
          ;;
@@ -461,7 +464,9 @@ function g() {
 # zsh and bash have different completion systems.
 if [ $SHELL = "/bin/zsh" ]; then
    compdef g=git
-else
+# Make sure the function is available before we call it
+# (it might not be available in non-interactive shells).
+elif declare -F __git_complete >/dev/null 2>&1; then
    __git_complete g git
 fi
 
