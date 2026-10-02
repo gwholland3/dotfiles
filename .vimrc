@@ -46,6 +46,9 @@ set nocompatible
 " Dynamically replace '%%' with '%:h' in Ex commands
 cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
+" Store lots of commands in the history
+set history=200
+
 
 """"""""""""""""""""""""
 " Conditional settings
