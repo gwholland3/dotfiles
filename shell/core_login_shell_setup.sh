@@ -30,5 +30,10 @@ fi
 export PATH=${PATH}:$HOME/bin
 
 # Do not save commands that start with a space to the history list
-export HISTCONTROL=ignorespace
+if [ -n "$BASH_VERSION" ]; then
+   export HISTCONTROL=ignorespace
+fi
+if [ -n "$ZSH_VERSION" ]; then
+   setopt HIST_IGNORE_SPACE
+fi
 
