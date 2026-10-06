@@ -17,6 +17,10 @@ set shiftwidth=3
 " Whenever a tab character is inserted, expand it into multiple spaces instead
 set expandtab
 
+" Allow multi-buffer commands like :argdo or :bufdo to handle all buffers
+" automatically without needing to write.
+set hidden
+
 " Enable automatic filetype detection, apply filetype-specific indentation
 " rules, and use filetype-specific plugins
 filetype plugin indent on
