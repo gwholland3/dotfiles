@@ -2,12 +2,19 @@
 " Global settings
 """"""""""""""""""""""""
 
-" Load optional plugins
+" Load optional plugins.
+"
 " We prefix these commands with `silent!` so that they don't output an error
 " message if a plugin happens to not exist on particular system.
-"
+
 " The `comment` plugin enables commenting and uncommenting lines quickly.
 silent! packadd comment
+
+" The `matchit` plugin enables jumping between more matching objects than just
+" braces, such as XML tags.
+silent! packadd matchit
+
+" Other settings.
 
 " Set the default width of a tab to N spaces
 set tabstop=3
