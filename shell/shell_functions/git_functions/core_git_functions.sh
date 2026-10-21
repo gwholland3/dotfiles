@@ -322,12 +322,12 @@ function git_squash() {
    # feature branch so far.
    g reset --soft "$merge_base_commit"
    
-   # Grab the commit message from the first commit on the feature branch. This is the message
-   # we'll use for our final squashed commit.
-   local first_commit_msg="$(g log --reverse --format=%B HEAD..HEAD@{1} | head -n 1)"
+   # Grab the first commit on the feature branch. We will use that commit's message
+   # when we create our final squashed commit.
+   local first_commit="$(g rev-list --reverse HEAD..HEAD@{1} | head -n 1)";
 
    # Create a new, squashed commit with all the changes on the feature branch.
-   g commit -m "$first_commit_msg"
+   g commit -C "$first_commit"
 }
 alias g_squash='git_squash'
 
