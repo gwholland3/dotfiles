@@ -37,6 +37,9 @@ set autoindent
 set smartindent
 set nowrap
 
+" Set a keyboard shortcut for toggling paste mode on and off.
+set pastetoggle=<F5>
+
 " Highlight search matches, both while and after typing
 set hlsearch
 set incsearch
