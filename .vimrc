@@ -63,6 +63,10 @@ cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Keyboard shortcut for :noh.
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
+" Scroll the text up or down, rather than your cursor.
+nnoremap <C-j> <C-e>j
+nnoremap <C-k> <C-y>k
+
 " Store lots of commands in the history
 set history=200
 
