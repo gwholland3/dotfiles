@@ -67,6 +67,10 @@ nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 nnoremap <C-j> <C-e>j
 nnoremap <C-k> <C-y>k
 
+" Map & to a more useful substitute command (default is `:s`).
+nnoremap & :&&<CR>
+xnoremap & :&&<CR>
+
 " Store lots of commands in the history
 set history=200
 
