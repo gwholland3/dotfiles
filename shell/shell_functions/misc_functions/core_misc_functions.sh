@@ -16,6 +16,21 @@ function my_test_function() {
    echo "EXP_VAR: $EXP_VAR"
 }
 
+# I've only bothered to write these functions for zsh for now.
+if [ $SHELL = "/bin/zsh" ]; then
+   # Updates the shell prompt to only show the current working directory for the rest of the shell session, for anonymized copy-pasting of terminal output.
+   function anon() {
+      [[ -z $ORIGINAL_PROMPT ]] && ORIGINAL_PROMPT=$PROMPT
+      PROMPT='%1~ %% '
+   }
+   
+   # Undoes anon().
+   function unanon() {
+      [[ -n $ORIGINAL_PROMPT ]] && PROMPT=$ORIGINAL_PROMPT
+      unset ORIGINAL_PROMPT
+   }
+fi
+
 # Perform sed substitution across an entire directory (defaults to current directory).
 function replace() {
    # Output an error message and exit if there isn't at least two arguments.
