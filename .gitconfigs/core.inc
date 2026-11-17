@@ -106,4 +106,8 @@
 [push]
    # Automatically set up an upstream tracking branch when running `git push` on a local-only branch
 	autoSetupRemote = true
+[worktree]
+   # This is helpful for storing git-ignored worktrees inside the git repo itself, so that you can move or
+   # mount the repo without issue.
+   useRelativePaths = true
 
